@@ -34,6 +34,10 @@ public class UserService {
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
+		if(userRepository.existsByEmail(user.getEmail())|| userRepository.existsByPhone(user.getPhone())) {
+			return ResponseEntity.badRequest().body("Email already exists or Phone number already exists");
+		}
+		
 		User savedUser = userRepository.save(user);
 
 		return savedUser != null ? ResponseEntity.ok("User registered successfully")

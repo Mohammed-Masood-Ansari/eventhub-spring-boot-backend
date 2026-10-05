@@ -41,15 +41,13 @@ public class EventHubSecurityConfig {
 
 				.authorizeHttpRequests(
 
-						a -> a.requestMatchers("/auth/**").permitAll()
-								.requestMatchers("/admin/**").hasRole("ADMIN")
-								.requestMatchers("/organiser/**").hasRole("ORGANISER")
-								.requestMatchers("/customer/**").hasRole("CUSTOMER")
-								.anyRequest().authenticated())
+						a -> a.requestMatchers("/auth/**").permitAll().requestMatchers("/admin/**").hasRole("ADMIN")
+								.requestMatchers("/organiser/**").hasRole("ORGANISER").requestMatchers("/customer/**")
+								.hasRole("CUSTOMER").anyRequest().authenticated())
 
 				.httpBasic(Customizer.withDefaults())
-				.logout(logout -> logout.logoutUrl("/auth/logout").invalidateHttpSession(true).deleteCookies("JSESSIONID")
-						.logoutSuccessUrl("/auth/login"))
+				.logout(logout -> logout.logoutUrl("/auth/logout").invalidateHttpSession(true)
+						.deleteCookies("JSESSIONID").logoutSuccessUrl("/auth/login"))
 				.oauth2ResourceServer(
 						server -> server.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter)))
 				.formLogin(Customizer.withDefaults());
@@ -107,14 +105,21 @@ public class EventHubSecurityConfig {
 	@Bean
 	public JwtAuthenticationConverter jwtAuthenticationConverter() {
 
-		JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+	    JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter =
+	            new JwtGrantedAuthoritiesConverter();
 
-		grantedAuthoritiesConverter.setAuthoritiesClaimName("scope");
+	    grantedAuthoritiesConverter.setAuthoritiesClaimName("role");
+	    grantedAuthoritiesConverter.setAuthorityPrefix("");
 
-		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+	    JwtAuthenticationConverter jwtAuthenticationConverter =
+	            new JwtAuthenticationConverter();
 
-		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+	    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+	    	    grantedAuthoritiesConverter
+	    	);
 
-		return jwtAuthenticationConverter;
+
+	    return jwtAuthenticationConverter;
 	}
+
 }

@@ -1,10 +1,10 @@
 package com.flowtech.eventhub_spring_boot_backend.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,26 +16,24 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
-@Table(name = "users")
-@Entity
-public class User {
+@Table(name = "events")
+public class Event {
 
+	@GeneratedValue(strategy = GenerationType.IDENTITY,generator = "event")
+	@SequenceGenerator(sequenceName = "event",name = "event_seq",initialValue = 87871)
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY,generator = "user")
-	@SequenceGenerator(sequenceName = "user",name = "user_seq",initialValue = 5001)
 	private Integer id;
 	private String name;
-	@Column(unique = true)
-	private String email;
-	private String password;
-	@Column(unique = true)
-	private Long phone;
+	private String description;
+	private String location;
+	private LocalDateTime dateTime;
 	@CreationTimestamp
 	private LocalDate createdAt;
 	
 	@ManyToOne
-	@JoinColumn(name = "role-id")
-	private Role role;
+	@JoinColumn(name = "organiser_id")
+	private User user;
 }

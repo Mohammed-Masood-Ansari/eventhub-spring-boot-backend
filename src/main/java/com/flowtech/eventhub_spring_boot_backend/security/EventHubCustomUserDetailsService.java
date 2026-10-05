@@ -20,6 +20,8 @@ public class EventHubCustomUserDetailsService implements UserDetailsService{
 		
 		User user=userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
 		
+		System.out.println("User found: and role is " + user.getRole().getName());
+		
 		return org.springframework.security.core.userdetails.User
 	            .withUsername(user.getEmail())
 	            .password(user.getPassword())
