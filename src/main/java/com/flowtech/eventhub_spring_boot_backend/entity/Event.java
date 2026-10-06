@@ -5,7 +5,11 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.flowtech.eventhub_spring_boot_backend.enums.EventVerification;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,6 +36,9 @@ public class Event {
 	private LocalDateTime dateTime;
 	@CreationTimestamp
 	private LocalDate createdAt;
+	
+	@Enumerated(EnumType.STRING)
+	private EventVerification status=EventVerification.PENDING;// pending, approved, rejected
 	
 	@ManyToOne
 	@JoinColumn(name = "organiser_id")

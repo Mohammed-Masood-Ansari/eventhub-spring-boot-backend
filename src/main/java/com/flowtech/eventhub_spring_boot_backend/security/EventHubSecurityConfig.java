@@ -9,7 +9,6 @@ import java.security.interfaces.RSAPublicKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,32 +26,42 @@ import org.springframework.security.web.SecurityFilterChain;
 public class EventHubSecurityConfig {
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http,
-			/* SecurityContextRepository contextRepository */ JwtAuthenticationConverter authenticationConverter)
-			throws Exception {
-		http.csrf(csrf -> csrf.disable())
+	public SecurityFilterChain securityFilterChain(
+	        HttpSecurity http,
+	        JwtAuthenticationConverter authenticationConverter)
+	        throws Exception {
 
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	    http
+	        .csrf(csrf -> csrf.disable())
 
-				/*
-				 * .securityContext(security->security.securityContextRepository(
-				 * contextRepository))
-				 */
+	        .sessionManagement(session ->
+	            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	        )
 
-				.authorizeHttpRequests(
+	        .authorizeHttpRequests(auth -> auth
 
-						a -> a.requestMatchers("/auth/**").permitAll().requestMatchers("/admin/**").hasRole("ADMIN")
-								.requestMatchers("/organiser/**").hasRole("ORGANISER").requestMatchers("/customer/**")
-								.hasRole("CUSTOMER").anyRequest().authenticated())
+	            .requestMatchers("/auth/**").permitAll()
 
-				.httpBasic(Customizer.withDefaults())
-				.logout(logout -> logout.logoutUrl("/auth/logout").invalidateHttpSession(true)
-						.deleteCookies("JSESSIONID").logoutSuccessUrl("/auth/login"))
-				.oauth2ResourceServer(
-						server -> server.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter)))
-				.formLogin(Customizer.withDefaults());
+	            .requestMatchers("/admin/**")
+	                .hasRole("ADMIN")
 
-		return http.build();
+	            .requestMatchers("/organiser/**")
+	                .hasRole("ORGANISER")
+
+	            .requestMatchers("/customer/**")
+	                .hasRole("CUSTOMER")
+
+	            .anyRequest()
+	                .authenticated()
+	        )
+
+	        .oauth2ResourceServer(resourceServer ->
+	            resourceServer.jwt(jwt ->
+	                jwt.jwtAuthenticationConverter(authenticationConverter)
+	            )
+	        );
+
+	    return http.build();
 	}
 
 	@Bean
@@ -66,7 +75,7 @@ public class EventHubSecurityConfig {
 	 * 
 	 * @Bean public SecurityContextRepository contextRepository() {
 	 * 
-	 * return new HttpSessionSecurityContextRepository(); }
+	 * return new 2ZHLuQGea6PBA1wUo7EQDGSvkP7KkQy3FCFrK5f1wtYb(); }
 	 */
 
 	@Bean
@@ -101,24 +110,21 @@ public class EventHubSecurityConfig {
 
 		return NimbusJwtDecoder.withPublicKey(publicKey).build();
 	}
-
+	
 	@Bean
 	public JwtAuthenticationConverter jwtAuthenticationConverter() {
-
-	    JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter =
-	            new JwtGrantedAuthoritiesConverter();
-
-	    grantedAuthoritiesConverter.setAuthoritiesClaimName("role");
+		
+	    JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+	    
+	    grantedAuthoritiesConverter.setAuthoritiesClaimName("scope");
+	    
+	    // IMPORTANT
 	    grantedAuthoritiesConverter.setAuthorityPrefix("");
 
-	    JwtAuthenticationConverter jwtAuthenticationConverter =
-	            new JwtAuthenticationConverter();
-
-	    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
-	    	    grantedAuthoritiesConverter
-	    	);
-
-
+	    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+	    
+	    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+	    
 	    return jwtAuthenticationConverter;
 	}
 

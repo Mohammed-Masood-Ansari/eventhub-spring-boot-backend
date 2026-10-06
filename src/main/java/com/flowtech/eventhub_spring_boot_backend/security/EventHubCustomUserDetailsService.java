@@ -1,12 +1,13 @@
 package com.flowtech.eventhub_spring_boot_backend.security;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import com.flowtech.eventhub_spring_boot_backend.entity.User;
 import com.flowtech.eventhub_spring_boot_backend.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,7 +26,7 @@ public class EventHubCustomUserDetailsService implements UserDetailsService{
 		return org.springframework.security.core.userdetails.User
 	            .withUsername(user.getEmail())
 	            .password(user.getPassword())
-	            .authorities("ROLE_" + user.getRole().getName())
+	            .authorities(user.getRole().getName())
 	            .build();
 	}
 

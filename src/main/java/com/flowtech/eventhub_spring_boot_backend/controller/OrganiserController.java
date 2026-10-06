@@ -11,6 +11,7 @@ import com.flowtech.eventhub_spring_boot_backend.service.EventService;
 
 import lombok.RequiredArgsConstructor;
 
+
 @RestController
 @RequestMapping(value = "/organiser")
 @RequiredArgsConstructor
