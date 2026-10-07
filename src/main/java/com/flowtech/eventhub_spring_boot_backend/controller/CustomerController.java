@@ -24,4 +24,10 @@ public class CustomerController {
 		return eventService.getAllApprovedEvents();
 	}
 	
+	public Event bookEvent(int eventId) {
+		
+		return eventService.bookEvent(eventId);
+		
+	}
+	
 }

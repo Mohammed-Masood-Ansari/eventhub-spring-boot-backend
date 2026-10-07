@@ -116,7 +116,7 @@ public class EventHubSecurityConfig {
 		
 	    JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 	    
-	    grantedAuthoritiesConverter.setAuthoritiesClaimName("scope");
+	    grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
 	    
 	    // IMPORTANT
 	    grantedAuthoritiesConverter.setAuthorityPrefix("");

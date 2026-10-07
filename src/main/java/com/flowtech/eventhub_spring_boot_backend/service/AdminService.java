@@ -3,6 +3,7 @@ package com.flowtech.eventhub_spring_boot_backend.service;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.flowtech.eventhub_spring_boot_backend.entity.Event;
@@ -16,7 +17,7 @@ public class AdminService {
 
 	private final EventService eventService;
 
-	public ResponseEntity<?> approveEvents() {
+	public ResponseEntity<?> approveEvents(Authentication authentication) {
 
 		List<Event> events = eventService.findEventByStatusPending();
 
@@ -29,13 +30,13 @@ public class AdminService {
 
 			event.setStatus(EventVerification.APPROVED);
 
-			eventService.registerEvent(event);
+			eventService.registerEvent(event,authentication);
 		}
 
 		return ResponseEntity.ok("All pending events have been approved.");
 	}
 	
-	public ResponseEntity<?> changeEventStatus(Integer eventId, String status) {
+	public ResponseEntity<?> changeEventStatus(Integer eventId, String status,Authentication authentication) {
 		
 		Event event = eventService.find(eventId);
 		
@@ -53,7 +54,7 @@ public class AdminService {
 		
 		event.setStatus(newStatus);
 		
-		eventService.registerEvent(event);
+		eventService.registerEvent(event,authentication);
 		
 		return ResponseEntity.ok("Event status updated successfully.");
 	}

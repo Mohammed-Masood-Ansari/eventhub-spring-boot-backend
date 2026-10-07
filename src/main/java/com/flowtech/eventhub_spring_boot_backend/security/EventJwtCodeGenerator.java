@@ -29,7 +29,7 @@ public class EventJwtCodeGenerator {
 		JwtClaimsSet claims = JwtClaimsSet.builder().issuer("event-hub").subject(authentication.getName()) // Or
 																											// authenticator.getName()
 				.issuedAt(instantNow).expiresAt(instantNow.plus(1, ChronoUnit.HOURS)) // Set expiration time
-				.claim("scope", roles) // Custom claims if needed
+				.claim("roles", roles) // Custom claims if needed
 				.build();
 		// 2. Encode and return the token string
 		return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

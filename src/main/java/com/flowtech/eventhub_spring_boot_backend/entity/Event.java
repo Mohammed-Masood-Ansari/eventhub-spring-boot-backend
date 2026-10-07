@@ -33,9 +33,11 @@ public class Event {
 	private String name;
 	private String description;
 	private String location;
-	private LocalDateTime dateTime;
+	private LocalDateTime eventDateTime;
 	@CreationTimestamp
 	private LocalDate createdAt;
+	private double ticketPrice;
+	private int availableTickets;
 	
 	@Enumerated(EnumType.STRING)
 	private EventVerification status=EventVerification.PENDING;// pending, approved, rejected

@@ -3,6 +3,7 @@ package com.flowtech.eventhub_spring_boot_backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +26,9 @@ public class AdminController {
 	private final EventService eventService;
 	
 	@GetMapping(value = "/approveEvents")
-	public ResponseEntity<?> approveEvents() {
+	public ResponseEntity<?> approveEvents(Authentication authentication) {
 		
-		return adminService.approveEvents();
+		return adminService.approveEvents(authentication);
 	}
 	
 	@GetMapping(value = "/findEventByStatusPending")
@@ -37,8 +38,8 @@ public class AdminController {
 	}
 	
 	@PostMapping(value = "/changeEventStatus")
-	public ResponseEntity<?> changeEventStatus(@RequestParam Integer eventId, @RequestParam String status) {
+	public ResponseEntity<?> changeEventStatus(@RequestParam Integer eventId, @RequestParam String status,Authentication authentication) {
 		
-		return adminService.changeEventStatus(eventId,status);
+		return adminService.changeEventStatus(eventId,status,authentication);
 	}
 }
