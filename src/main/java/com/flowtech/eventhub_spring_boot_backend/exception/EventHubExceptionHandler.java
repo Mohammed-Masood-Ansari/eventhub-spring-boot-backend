@@ -12,4 +12,9 @@ public class EventHubExceptionHandler {
 	public ResponseEntity<?> runTimeExcetionHandler(RuntimeException exception){
 		return ResponseEntity.ok(exception.getMessage());
 	}
+	
+	@ExceptionHandler(value = TicketNotAvailableException.class)
+	public ResponseEntity<?> ticketNotAvailableExceptionHandler(TicketNotAvailableException exception){
+		return ResponseEntity.ok(exception.getMessage());
+	}
 }
